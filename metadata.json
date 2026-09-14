@@ -1,0 +1,6 @@
+{
+  "name": "Yaswant Code",
+  "description": "Premium Glassmorphism & Bento UI EdTech platform for students, instructors, and administrators with comprehensive course learning, quizzes, assignments, credentials, and analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
