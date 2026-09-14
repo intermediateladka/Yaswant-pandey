@@ -12,6 +12,7 @@ import {
   Sparkles 
 } from 'lucide-react';
 import { Button } from './Button';
+import { BrandLogo } from './BrandLogo';
 
 export const AuthModal: React.FC = () => {
   const { 
@@ -67,14 +68,7 @@ export const AuthModal: React.FC = () => {
       >
         {/* Modal Header */}
         <div className="flex items-center justify-between p-6 pb-4 border-b border-neutral-100 dark:border-neutral-800/80">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold flex items-center justify-center text-xs">
-              A
-            </div>
-            <span className="font-bold text-sm tracking-tight text-neutral-900 dark:text-white">
-              {brandName}
-            </span>
-          </div>
+          <BrandLogo size="sm" brandName={brandName} />
           <button 
             onClick={closeAuthModal}
             className="p-1.5 rounded-xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"

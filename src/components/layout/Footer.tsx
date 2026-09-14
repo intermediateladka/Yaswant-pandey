@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLms } from '../../context/LmsContext';
 import { Github, Twitter, Linkedin, ArrowUpRight, ShieldCheck, Heart } from 'lucide-react';
+import { BrandLogo } from '../ui/BrandLogo';
 
 export const Footer: React.FC = () => {
   const { setCurrentView, brandName } = useLms();
@@ -12,13 +13,12 @@ export const Footer: React.FC = () => {
           
           {/* Brand Col */}
           <div className="col-span-2">
-            <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-8 h-8 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-black flex items-center justify-center text-xs">
-                ▲
-              </div>
-              <span className="text-base font-extrabold tracking-tight text-neutral-900 dark:text-white">
-                {brandName}
-              </span>
+            <div className="mb-3">
+              <BrandLogo
+                size="md"
+                brandName={brandName}
+                onClick={() => setCurrentView('landing')}
+              />
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm leading-relaxed mb-4">
               The high-velocity learning environment for serious software engineers, distributed systems architects, and machine learning researchers.

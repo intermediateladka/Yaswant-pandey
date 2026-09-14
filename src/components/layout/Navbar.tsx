@@ -31,6 +31,7 @@ import {
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { BrandLogo } from '../ui/BrandLogo';
 import { RoleType } from '../../types/lms';
 
 export const Navbar: React.FC = () => {
@@ -95,22 +96,12 @@ export const Navbar: React.FC = () => {
           {/* Left: Brand Logo & Navigation */}
           <div className="flex items-center gap-4 lg:gap-8">
             {/* Logo Area */}
-            <div 
+            <BrandLogo
+              size="md"
+              brandName={brandName}
               onClick={() => setCurrentView('landing')}
-              className="flex items-center gap-2.5 cursor-pointer group shrink-0"
-            >
-              <div className="w-9 h-9 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-black flex items-center justify-center text-sm shadow-sm group-hover:scale-105 transition-transform">
-                <span className="font-mono">▲</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm sm:text-base font-extrabold tracking-tight text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
-                  {brandName}
-                </span>
-                <span className="text-[10px] text-neutral-400 font-mono tracking-wider uppercase -mt-0.5">
-                  ENGINEERING LMS
-                </span>
-              </div>
-            </div>
+              className="shrink-0"
+            />
 
             {/* Desktop Navigation Links (xl+: all 9 links) */}
             <nav className="hidden xl:flex items-center gap-1">
