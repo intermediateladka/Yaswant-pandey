@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useLms } from '../../context/LmsContext';
 import { 
   Search, 
@@ -75,90 +76,111 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { id: 'courses', label: 'Courses', icon: BookOpen },
-    { id: 'projects', label: 'Projects', icon: FolderGit2 },
-    { id: 'learning-paths', label: 'Paths', icon: Sparkles },
-    { id: 'workspace', label: 'Google Hub', icon: Cloud },
-    { id: 'notes', label: 'Notes', icon: FileText },
-    { id: 'tools', label: 'Tools', icon: Wrench },
-    { id: 'blog', label: 'Blog', icon: FileText },
-    { id: 'resources', label: 'Resources', icon: DownloadCloud },
-    { id: 'community', label: 'Community', icon: User },
+    { id: 'courses', label: 'Courses', desc: 'Interactive full-stack masterclasses', icon: BookOpen },
+    { id: 'projects', label: 'Projects', desc: 'Hands-on capstones & repositories', icon: FolderGit2 },
+    { id: 'learning-paths', label: 'Paths', desc: 'Sequential career roadmaps', icon: Sparkles },
+    { id: 'workspace', label: 'Google Hub', desc: 'Drive, Calendar, Chat, Gmail', icon: Cloud },
+    { id: 'notes', label: 'Notes', desc: 'Study notes & code snippets', icon: FileText },
+    { id: 'tools', label: 'Tools', desc: 'JSON, Regex, JWT, Cron utilities', icon: Wrench },
+    { id: 'blog', label: 'Blog', desc: 'Architecture & deep-dive guides', icon: FileText },
+    { id: 'resources', label: 'Resources', desc: 'Starter templates & cheat sheets', icon: DownloadCloud },
+    { id: 'community', label: 'Community', desc: 'Discussions & peer code review', icon: User },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-neutral-200/80 dark:border-neutral-800/80 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        
-        {/* Left: Brand Logo & Navigation */}
-        <div className="flex items-center gap-8">
-          {/* Logo Area */}
-          <div 
-            onClick={() => setCurrentView('landing')}
-            className="flex items-center gap-2.5 cursor-pointer group"
-          >
-            <div className="w-9 h-9 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-black flex items-center justify-center text-sm shadow-sm group-hover:scale-105 transition-transform">
-              <span className="font-mono">▲</span>
+    <>
+      <header className="sticky top-0 z-40 w-full border-b border-neutral-200/80 dark:border-neutral-800/80 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-4">
+          
+          {/* Left: Brand Logo & Navigation */}
+          <div className="flex items-center gap-4 lg:gap-8">
+            {/* Logo Area */}
+            <div 
+              onClick={() => setCurrentView('landing')}
+              className="flex items-center gap-2.5 cursor-pointer group shrink-0"
+            >
+              <div className="w-9 h-9 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-black flex items-center justify-center text-sm shadow-sm group-hover:scale-105 transition-transform">
+                <span className="font-mono">▲</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm sm:text-base font-extrabold tracking-tight text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
+                  {brandName}
+                </span>
+                <span className="text-[10px] text-neutral-400 font-mono tracking-wider uppercase -mt-0.5">
+                  ENGINEERING LMS
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm sm:text-base font-extrabold tracking-tight text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors">
-                {brandName}
-              </span>
-              <span className="text-[10px] text-neutral-400 font-mono tracking-wider uppercase -mt-0.5">
-                ENGINEERING LMS
-              </span>
-            </div>
+
+            {/* Desktop Navigation Links (xl+: all 9 links) */}
+            <nav className="hidden xl:flex items-center gap-1">
+              {navLinks.map((link) => {
+                const isActive = currentView === link.id;
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => setCurrentView(link.id as any)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${
+                      isActive 
+                        ? 'text-neutral-950 dark:text-white bg-neutral-100 dark:bg-neutral-850 font-semibold' 
+                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900'
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Tablet Navigation Links (lg to xl: top 4 primary links) */}
+            <nav className="hidden lg:flex xl:hidden items-center gap-1">
+              {navLinks.slice(0, 4).map((link) => {
+                const isActive = currentView === link.id;
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => setCurrentView(link.id as any)}
+                    className={`px-2.5 py-1.5 rounded-xl text-xs font-medium transition-colors ${
+                      isActive 
+                        ? 'text-neutral-950 dark:text-white bg-neutral-100 dark:bg-neutral-850 font-semibold' 
+                        : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900'
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                );
+              })}
+            </nav>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = currentView === link.id;
-              return (
-                <button
-                  key={link.id}
-                  onClick={() => setCurrentView(link.id as any)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${
-                    isActive 
-                      ? 'text-neutral-950 dark:text-white bg-neutral-100 dark:bg-neutral-850 font-semibold' 
-                      : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900'
-                  }`}
-                >
-                  {link.label}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
+          {/* Center/Right: Global Search Bar Trigger (Visible on Tablet md+ and Desktop) */}
+          <div className="hidden md:flex flex-1 max-w-xs mx-2 lg:mx-4">
+            <button
+              onClick={() => setSearchModalOpen(true)}
+              className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs text-neutral-500 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all shadow-2xs"
+            >
+              <div className="flex items-center gap-2">
+                <Search className="w-3.5 h-3.5 text-neutral-400" />
+                <span className="truncate">Search courses, skills, paths...</span>
+              </div>
+              <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200 dark:bg-neutral-800 rounded">
+                ⌘K
+              </kbd>
+            </button>
+          </div>
 
-        {/* Center/Right: Global Search Bar Trigger */}
-        <div className="hidden lg:flex flex-1 max-w-xs mx-4">
-          <button
-            onClick={() => setSearchModalOpen(true)}
-            className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs text-neutral-500 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all shadow-2xs"
-          >
-            <div className="flex items-center gap-2">
-              <Search className="w-3.5 h-3.5 text-neutral-400" />
-              <span>Search courses, skills, paths...</span>
-            </div>
-            <kbd className="hidden xl:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-200 dark:bg-neutral-800 rounded">
-              ⌘K
-            </kbd>
-          </button>
-        </div>
-
-        {/* Right: Actions, Notifications, Theme, User Profile & Mobile Menu */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          
-          {/* Mobile Search Button */}
-          <button
-            id="navbar-mobile-search-btn"
-            onClick={() => setSearchModalOpen(true)}
-            className="lg:hidden p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-850 transition-colors"
-            aria-label="Search courses, skills, and paths"
-          >
-            <Search className="w-4 h-4" />
-          </button>
+          {/* Right: Actions, Notifications, Theme, User Profile & Mobile/Tablet Menu */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            
+            {/* Mobile Search Button (only on small screens < md where input is hidden) */}
+            <button
+              id="navbar-mobile-search-btn"
+              onClick={() => setSearchModalOpen(true)}
+              className="md:hidden p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-850 transition-colors"
+              aria-label="Search courses, skills, and paths"
+            >
+              <Search className="w-4 h-4" />
+            </button>
 
           {/* Theme Toggle (Light / Dark / System) - hidden on mobile to avoid overflow, shown on sm+ */}
           <div className="hidden sm:inline-flex">
@@ -395,12 +417,12 @@ export const Navbar: React.FC = () => {
             </div>
           )}
 
-          {/* Mobile Menu Hamburger Button - High visibility & clear touch target */}
+          {/* Mobile & Tablet Menu Hamburger Button - Visible on all screens below xl (tablets and phones) */}
           <button
             id="mobile-main-menu-toggle-btn"
             type="button"
             onClick={() => setMobileMenuOpen(prev => !prev)}
-            className={`md:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all ${
+            className={`xl:hidden flex items-center justify-center w-10 h-10 rounded-xl transition-all cursor-pointer ${
               mobileMenuOpen 
                 ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 shadow-md ring-2 ring-neutral-400/40' 
                 : 'text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-850 active:scale-95 bg-neutral-100/80 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800'
@@ -412,19 +434,27 @@ export const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
+    </header>
 
-      {/* Mobile Full-Screen Overlay & Navigation Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 z-50 flex flex-col justify-start">
-          {/* Backdrop click-to-close */}
-          <div 
-            className="fixed inset-0 top-16 bg-neutral-950/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-150"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-hidden="true"
-          />
-          
-          {/* Drawer Panel */}
-          <div className="relative w-full max-h-[calc(100vh-4rem)] overflow-y-auto bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 shadow-2xl p-4 sm:p-5 space-y-4 animate-in slide-in-from-top-2 duration-200 z-10">
+    {/* Mobile & Tablet Full-Screen Navigation Drawer via Portal (Escapes header stacking context) */}
+    {mobileMenuOpen && typeof document !== 'undefined' && createPortal(
+      <div 
+        id="mobile-tablet-nav-drawer"
+        className="fixed inset-0 top-16 z-50 flex flex-col xl:hidden"
+      >
+        {/* Backdrop click-to-close */}
+        <div 
+          className="fixed inset-0 top-16 bg-neutral-950/70 backdrop-blur-xs transition-opacity cursor-pointer"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+        
+        {/* Drawer Panel */}
+        <div 
+          className="relative w-full max-h-[calc(100vh-4rem)] overflow-y-auto bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 shadow-2xl p-4 sm:p-6 lg:p-8 space-y-5 z-10 animate-in slide-in-from-top-2 duration-200"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="max-w-4xl mx-auto space-y-5">
             
             {/* Quick Search Action */}
             <button
@@ -432,21 +462,22 @@ export const Navbar: React.FC = () => {
                 setMobileMenuOpen(false);
                 setSearchModalOpen(true);
               }}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-neutral-100/90 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-neutral-100/90 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs sm:text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               <div className="flex items-center gap-2.5">
                 <Search className="w-4 h-4 text-neutral-400" />
-                <span>Search courses, tools, paths...</span>
+                <span>Search all courses, tools, roadmaps, tutorials...</span>
               </div>
-              <span className="font-mono text-[10px] bg-neutral-200 dark:bg-neutral-800 px-1.5 py-0.5 rounded text-neutral-500">⌘K</span>
+              <span className="font-mono text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-0.5 rounded text-neutral-500">⌘K</span>
             </button>
 
-            {/* Navigation Links Grid */}
+            {/* Navigation Links Grid (Responsive: 1 col on mobile, 2 cols on small tablet, 3 cols on regular tablet) */}
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2 px-1">
-                Explore Curriculum & Tools
+              <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2.5 px-1 flex items-center justify-between">
+                <span>Explore Curriculum & Tools</span>
+                <span className="text-[10px] font-normal text-neutral-500">9 Modules</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 {navLinks.map((link) => {
                   const Icon = link.icon;
                   const isActive = currentView === link.id;
@@ -457,91 +488,102 @@ export const Navbar: React.FC = () => {
                         setCurrentView(link.id as any);
                         setMobileMenuOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                      className={`w-full flex items-start gap-3 p-3 rounded-xl text-left text-xs transition-all ${
                         isActive
-                          ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-bold shadow-xs'
-                          : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900'
+                          ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-bold shadow-xs ring-1 ring-neutral-900 dark:ring-white'
+                          : 'bg-neutral-50 dark:bg-neutral-900/60 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-850 border border-neutral-200/60 dark:border-neutral-800'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-white dark:text-neutral-950' : 'text-neutral-400'}`} />
-                        <span>{link.label}</span>
+                      <div className={`p-2 rounded-lg shrink-0 ${
+                        isActive
+                          ? 'bg-white/20 dark:bg-neutral-950/20 text-white dark:text-neutral-950'
+                          : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 shadow-2xs'
+                      }`}>
+                        <Icon className="w-4 h-4" />
                       </div>
-                      {isActive && (
-                        <span className="text-[10px] bg-white/20 dark:bg-black/20 px-1.5 py-0.5 rounded">Active</span>
-                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="font-semibold truncate">{link.label}</span>
+                          {isActive && (
+                            <span className="text-[9px] uppercase tracking-wider font-bold bg-white/20 dark:bg-black/20 px-1.5 py-0.5 rounded">Active</span>
+                          )}
+                        </div>
+                        <p className={`text-[11px] line-clamp-1 mt-0.5 ${isActive ? 'text-neutral-300 dark:text-neutral-600' : 'text-neutral-400'}`}>
+                          {link.desc}
+                        </p>
+                      </div>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Quick Portals & Dashboards */}
+            {/* Quick Portals & Dashboards (2 cols on mobile, 4 cols on tablet) */}
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-850">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2 px-1">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2.5 px-1">
                 Portals & Workspaces
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start text-xs h-9"
-                  icon={<GraduationCap className="w-3.5 h-3.5" />}
+                  className="justify-start text-xs h-10 px-3"
+                  icon={<GraduationCap className="w-4 h-4 text-emerald-500" />}
                   onClick={() => {
                     setCurrentView('student-dashboard');
                     setMobileMenuOpen(false);
                   }}
                 >
-                  Dashboard
+                  <span className="truncate">Student Dashboard</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start text-xs h-9"
-                  icon={<Cloud className="w-3.5 h-3.5 text-blue-500" />}
+                  className="justify-start text-xs h-10 px-3"
+                  icon={<Cloud className="w-4 h-4 text-blue-500" />}
                   onClick={() => {
                     setCurrentView('workspace');
                     setMobileMenuOpen(false);
                   }}
                 >
-                  Workspace
+                  <span className="truncate">Google Workspace</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start text-xs h-9"
-                  icon={<Layers className="w-3.5 h-3.5" />}
+                  className="justify-start text-xs h-10 px-3"
+                  icon={<Layers className="w-4 h-4 text-purple-500" />}
                   onClick={() => {
                     setCurrentView('instructor-dashboard');
                     setMobileMenuOpen(false);
                   }}
                 >
-                  Instructor
+                  <span className="truncate">Instructor Studio</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="justify-start text-xs h-9"
-                  icon={<ShieldCheck className="w-3.5 h-3.5" />}
+                  className="justify-start text-xs h-10 px-3"
+                  icon={<ShieldCheck className="w-4 h-4 text-amber-500" />}
                   onClick={() => {
                     setCurrentView('admin-dashboard');
                     setMobileMenuOpen(false);
                   }}
                 >
-                  Admin Portal
+                  <span className="truncate">Admin SaaS Portal</span>
                 </Button>
               </div>
             </div>
 
             {/* Role & Persona Switcher */}
-            <div className="p-3 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2">
+            <div className="p-3 sm:p-4 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2.5">
               <div className="flex items-center justify-between text-xs font-semibold text-neutral-600 dark:text-neutral-400">
                 <span>Active Persona Role</span>
                 <Badge variant={role === 'guest' ? 'neutral' : 'emerald'} size="sm">
                   {role}
                 </Badge>
               </div>
-              <div className="grid grid-cols-4 gap-1.5 text-xs font-medium">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs font-medium">
                 {(['student', 'instructor', 'admin', 'guest'] as RoleType[]).map((r) => (
                   <button
                     key={r}
@@ -553,7 +595,7 @@ export const Navbar: React.FC = () => {
                       if (r === 'guest') setCurrentView('landing');
                       setMobileMenuOpen(false);
                     }}
-                    className={`py-1.5 px-2 rounded-xl text-center capitalize text-xs transition-all ${
+                    className={`py-2 px-2.5 rounded-xl text-center capitalize text-xs font-medium transition-all cursor-pointer ${
                       role === r
                         ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-bold shadow-xs'
                         : 'bg-white dark:bg-neutral-850 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800'
@@ -573,11 +615,11 @@ export const Navbar: React.FC = () => {
 
             {/* Guest Sign In Strip (if not logged in) */}
             {role === 'guest' && (
-              <div className="pt-2 border-t border-neutral-100 dark:border-neutral-850 flex gap-2">
+              <div className="pt-2 border-t border-neutral-100 dark:border-neutral-850 flex flex-col sm:flex-row gap-2">
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="flex-1"
+                  size="md"
+                  className="w-full sm:flex-1 justify-center"
                   onClick={() => {
                     setMobileMenuOpen(false);
                     openAuthModal('login');
@@ -587,8 +629,8 @@ export const Navbar: React.FC = () => {
                 </Button>
                 <Button
                   variant="primary"
-                  size="sm"
-                  className="flex-1 font-bold"
+                  size="md"
+                  className="w-full sm:flex-1 justify-center font-bold"
                   onClick={() => {
                     setMobileMenuOpen(false);
                     openAuthModal('signup');
@@ -600,7 +642,9 @@ export const Navbar: React.FC = () => {
             )}
           </div>
         </div>
-      )}
-    </header>
+      </div>,
+      document.body
+    )}
+  </>
   );
 };
