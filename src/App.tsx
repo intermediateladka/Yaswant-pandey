@@ -32,6 +32,8 @@ import { FreeResourcesPage } from './views/FreeResourcesPage';
 import { NotesPage } from './views/NotesPage';
 import { ToolsPage } from './views/ToolsPage';
 import { ProjectsPage } from './views/ProjectsPage';
+import { GoogleWorkspaceHub } from './components/workspace/GoogleWorkspaceHub';
+import { WorkspaceProvider } from './context/WorkspaceContext';
 
 const AppShell: React.FC = () => {
   const { currentView } = useLms();
@@ -80,6 +82,8 @@ const AppShell: React.FC = () => {
         return <ToolsPage />;
       case 'projects':
         return <ProjectsPage />;
+      case 'workspace':
+        return <GoogleWorkspaceHub />;
       default:
         return <LandingPage />;
     }
@@ -119,7 +123,9 @@ export default function App() {
   return (
     <ThemeProvider>
       <LmsProvider>
-        <AppShell />
+        <WorkspaceProvider>
+          <AppShell />
+        </WorkspaceProvider>
       </LmsProvider>
     </ThemeProvider>
   );

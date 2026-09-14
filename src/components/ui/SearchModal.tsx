@@ -33,6 +33,7 @@ export const SearchModal: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'courses' | 'paths' | 'projects' | 'articles' | 'resources'>('all');
 
   const popularSearches = [
+    'Google Drive & Workspace',
     'React 19 Server Actions',
     'PyTorch Transformers',
     'Kubernetes GitOps',

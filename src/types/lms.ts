@@ -21,7 +21,8 @@ export type ActiveView =
   | 'resources'
   | 'notes'
   | 'tools'
-  | 'projects';
+  | 'projects'
+  | 'workspace';
 
 export interface Lesson {
   id: string;

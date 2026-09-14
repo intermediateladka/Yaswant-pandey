@@ -15,8 +15,13 @@ import {
   Calendar, 
   FileText, 
   HelpCircle,
-  ExternalLink
+  ExternalLink,
+  FolderOpen,
+  MessageSquare,
+  Mail,
+  Cloud
 } from 'lucide-react';
+import { useWorkspace } from '../context/WorkspaceContext';
 import { GlassCard } from '../components/ui/GlassCard';
 import { BentoCard } from '../components/ui/BentoCard';
 import { Badge } from '../components/ui/Badge';
@@ -30,6 +35,8 @@ export const StudentDashboardPage: React.FC = () => {
     setCertificateModal,
     emptyStateSimulated 
   } = useLms();
+
+  const { calendarEvents, driveFiles, isConnected: isWorkspaceConnected } = useWorkspace();
 
   const enrolledCourses = emptyStateSimulated ? [] : courses.filter(c => c.enrolled);
 
@@ -328,6 +335,76 @@ export const StudentDashboardPage: React.FC = () => {
         </GlassCard>
 
       </div>
+
+      {/* 4.5. Google Workspace & Live Schedule Quick Strip */}
+      <GlassCard className="p-6 bg-gradient-to-r from-blue-900/10 via-neutral-900/20 to-neutral-900/40 border border-blue-500/20">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-4 border-b border-neutral-200/60 dark:border-neutral-800">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-blue-600/20 text-blue-500 rounded-xl border border-blue-500/30">
+              <Cloud className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-neutral-950 dark:text-white">Google Workspace & Live Sync</h3>
+                <Badge variant={isWorkspaceConnected ? 'emerald' : 'blue'} size="sm">
+                  {isWorkspaceConnected ? 'Live Synced' : 'Ready'}
+                </Badge>
+              </div>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                Direct integration with Google Drive, Google Calendar, Google Chat, and Gmail.
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentView('workspace')}
+            icon={<ArrowRight className="w-3.5 h-3.5" />}
+            iconPosition="right"
+          >
+            Open Workspace Hub
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Upcoming Event Snippet */}
+          <div className="p-3.5 rounded-2xl bg-white/70 dark:bg-neutral-850/70 border border-neutral-200/80 dark:border-neutral-750 flex items-start gap-3">
+            <div className="p-2.5 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 rounded-xl shrink-0">
+              <Calendar className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[10px] uppercase font-bold text-blue-600 dark:text-blue-400 tracking-wider">
+                Next Calendar Session
+              </div>
+              <div className="text-xs font-bold text-neutral-900 dark:text-white truncate mt-0.5">
+                {calendarEvents[0]?.summary || 'Cohort Live Q&A Session'}
+              </div>
+              <div className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+                {calendarEvents[0]?.start.dateTime ? new Date(calendarEvents[0].start.dateTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Scheduled'}
+              </div>
+            </div>
+          </div>
+
+          {/* Drive Materials Snippet */}
+          <div className="p-3.5 rounded-2xl bg-white/70 dark:bg-neutral-850/70 border border-neutral-200/80 dark:border-neutral-750 flex items-start gap-3">
+            <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-xl shrink-0">
+              <FolderOpen className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[10px] uppercase font-bold text-emerald-600 dark:text-emerald-400 tracking-wider">
+                Google Drive Materials ({driveFiles.length} files)
+              </div>
+              <div className="text-xs font-bold text-neutral-900 dark:text-white truncate mt-0.5">
+                {driveFiles[0]?.name || 'Course-Syllabus.pdf'}
+              </div>
+              <div className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+                {driveFiles[0]?.size || 'Synced to Google Cloud'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </GlassCard>
 
       {/* 5. Enrolled Courses Gallery */}
       <div>

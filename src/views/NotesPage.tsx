@@ -18,14 +18,21 @@ import {
   BookOpen, 
   Sparkles,
   Calendar,
-  X
+  X,
+  FolderOpen,
+  Database
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { useWorkspace } from '../context/WorkspaceContext';
+import { firebaseDb } from '../services/firebaseDb';
 
 const NOTES_STORAGE_KEY = 'yaswant_code_study_notes';
 
 export const NotesPage: React.FC = () => {
   const { addToast } = useLms();
+  const { uploadNoteToDrive, isConnected: isWorkspaceConnected } = useWorkspace();
+  const [isSyncingDrive, setIsSyncingDrive] = useState(false);
+  const [isSyncingFirestore, setIsSyncingFirestore] = useState(false);
 
   // Load from localStorage or default notes
   const [notes, setNotes] = useState<StudyNote[]>(() => {
@@ -168,6 +175,40 @@ export const NotesPage: React.FC = () => {
       setCopiedNote(true);
       addToast('Copied to clipboard', 'Note markdown copied successfully.', 'success');
       setTimeout(() => setCopiedNote(false), 2000);
+    }
+  };
+
+  const handleSaveToDrive = async () => {
+    if (!activeNote) return;
+    setIsSyncingDrive(true);
+    try {
+      await uploadNoteToDrive(activeNote.title, activeNote.content);
+      addToast('Saved to Google Drive', `"${activeNote.title}.md" backed up to Google Drive.`, 'success');
+    } catch {
+      addToast('Google Drive Sync', 'Could not upload note to Google Drive.', 'error');
+    } finally {
+      setIsSyncingDrive(false);
+    }
+  };
+
+  const handleSaveToFirestore = async () => {
+    if (!activeNote) return;
+    setIsSyncingFirestore(true);
+    try {
+      await firebaseDb.saveUserNote('current_learner', {
+        id: activeNote.id,
+        userId: 'current_learner',
+        title: activeNote.title,
+        content: activeNote.content,
+        category: activeNote.category,
+        tags: activeNote.tags,
+        updatedAt: new Date().toISOString()
+      });
+      addToast('Firebase Firestore', 'Study note synced securely to Firebase cloud.', 'success');
+    } catch {
+      addToast('Firebase Sync', 'Saved locally. Cloud sync requires network.', 'info');
+    } finally {
+      setIsSyncingFirestore(false);
     }
   };
 
@@ -366,6 +407,26 @@ export const NotesPage: React.FC = () => {
                     title={activeNote.starred ? 'Unstar' : 'Star note'}
                   >
                     <Star className={`w-3.5 h-3.5 ${activeNote.starred ? 'fill-amber-500' : ''}`} />
+                  </button>
+
+                  {/* Google Drive Backup Button */}
+                  <button
+                    onClick={handleSaveToDrive}
+                    disabled={isSyncingDrive}
+                    className="p-2 rounded-xl border border-neutral-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
+                    title="Backup note to Google Drive"
+                  >
+                    <FolderOpen className={`w-3.5 h-3.5 ${isSyncingDrive ? 'animate-pulse' : ''}`} />
+                  </button>
+
+                  {/* Firebase Firestore Cloud Button */}
+                  <button
+                    onClick={handleSaveToFirestore}
+                    disabled={isSyncingFirestore}
+                    className="p-2 rounded-xl border border-neutral-200 dark:border-neutral-800 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-colors"
+                    title="Sync note to Firebase Cloud"
+                  >
+                    <Database className={`w-3.5 h-3.5 ${isSyncingFirestore ? 'animate-spin' : ''}`} />
                   </button>
 
                   {/* Copy Button */}

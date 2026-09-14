@@ -17,7 +17,8 @@ import {
   DownloadCloud,
   Edit3,
   Wrench,
-  FolderGit2
+  FolderGit2,
+  Cloud
 } from 'lucide-react';
 
 export const RoleSwitcher: React.FC = () => {
@@ -45,6 +46,7 @@ export const RoleSwitcher: React.FC = () => {
     { id: 'notes', label: 'Study Notes & Pad', icon: Edit3, category: 'Learner' },
     { id: 'tools', label: 'Developer Tools', icon: Wrench, category: 'Learner' },
     { id: 'projects', label: 'Capstone Projects', icon: FolderGit2, category: 'Learner' },
+    { id: 'workspace', label: 'Google Workspace Hub', icon: Cloud, category: 'Learner' },
     { id: 'student-dashboard', label: '4. Student Dashboard', icon: GraduationCap, category: 'Learner' },
     { id: 'learning-interface', label: '5. Learning Player', icon: BookOpen, category: 'Learner' },
     { id: 'quiz', label: '6. Quiz Interface', icon: HelpCircle, category: 'Learner' },

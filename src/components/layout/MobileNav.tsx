@@ -21,7 +21,8 @@ import {
   Flame,
   Award,
   Sun,
-  Moon
+  Moon,
+  Cloud
 } from 'lucide-react';
 import { RoleType } from '../../types/lms';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -75,6 +76,14 @@ export const MobileNav: React.FC = () => {
 
   // Material Bottom Sheet Grid Apps
   const sheetApps = [
+    {
+      id: 'workspace',
+      label: 'Google Workspace',
+      desc: 'Drive, Calendar, Chat, Gmail',
+      icon: Cloud,
+      color: 'bg-blue-600/15 text-blue-600 dark:text-blue-400',
+      tag: 'Google'
+    },
     {
       id: 'projects',
       label: 'Projects & Capstones',

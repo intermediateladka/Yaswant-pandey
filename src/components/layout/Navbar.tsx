@@ -52,6 +52,7 @@ export const Navbar: React.FC = () => {
     { id: 'blog', label: 'Blog' },
     { id: 'resources', label: 'Free Resources' },
     { id: 'notes', label: 'Notes' },
+    { id: 'workspace', label: 'Google Hub' },
     { id: 'tools', label: 'Tools' },
     { id: 'community', label: 'Community' },
   ];
