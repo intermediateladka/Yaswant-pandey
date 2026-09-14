@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLms } from '../../context/LmsContext';
 import { 
   Search, 
@@ -21,11 +21,16 @@ import {
   ChevronDown,
   FileText,
   Wrench,
-  DownloadCloud
+  DownloadCloud,
+  FolderGit2,
+  Cloud,
+  ChevronRight,
+  Compass
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { RoleType } from '../../types/lms';
 
 export const Navbar: React.FC = () => {
   const {
@@ -45,16 +50,40 @@ export const Navbar: React.FC = () => {
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+  // Close mobile drawer on escape key or view navigation
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setNotifDropdownOpen(false);
+        setUserMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const navLinks = [
-    { id: 'courses', label: 'Courses' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'learning-paths', label: 'Paths' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'resources', label: 'Free Resources' },
-    { id: 'notes', label: 'Notes' },
-    { id: 'workspace', label: 'Google Hub' },
-    { id: 'tools', label: 'Tools' },
-    { id: 'community', label: 'Community' },
+    { id: 'courses', label: 'Courses', icon: BookOpen },
+    { id: 'projects', label: 'Projects', icon: FolderGit2 },
+    { id: 'learning-paths', label: 'Paths', icon: Sparkles },
+    { id: 'workspace', label: 'Google Hub', icon: Cloud },
+    { id: 'notes', label: 'Notes', icon: FileText },
+    { id: 'tools', label: 'Tools', icon: Wrench },
+    { id: 'blog', label: 'Blog', icon: FileText },
+    { id: 'resources', label: 'Resources', icon: DownloadCloud },
+    { id: 'community', label: 'Community', icon: User },
   ];
 
   return (
@@ -118,26 +147,30 @@ export const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {/* Right: Actions, Notifications, Theme, User Profile */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right: Actions, Notifications, Theme, User Profile & Mobile Menu */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           
           {/* Mobile Search Button */}
           <button
+            id="navbar-mobile-search-btn"
             onClick={() => setSearchModalOpen(true)}
-            className="lg:hidden p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-            aria-label="Search"
+            className="lg:hidden p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-850 transition-colors"
+            aria-label="Search courses, skills, and paths"
           >
             <Search className="w-4 h-4" />
           </button>
 
-          {/* Theme Toggle (Light / Dark / System) */}
-          <ThemeToggle variant="segmented" size="sm" />
+          {/* Theme Toggle (Light / Dark / System) - hidden on mobile to avoid overflow, shown on sm+ */}
+          <div className="hidden sm:inline-flex">
+            <ThemeToggle variant="segmented" size="sm" />
+          </div>
 
           {/* Notifications Bell with Dropdown */}
           <div className="relative">
             <button
+              id="navbar-notifications-btn"
               onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
-              className="p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors relative"
+              className="p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-850 transition-colors relative"
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
@@ -209,10 +242,11 @@ export const Navbar: React.FC = () => {
 
           {/* User Profile / Auth Action */}
           {role === 'guest' ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Button
                 variant="ghost"
                 size="sm"
+                className="hidden sm:inline-flex"
                 onClick={() => openAuthModal('login')}
               >
                 Log In
@@ -220,16 +254,20 @@ export const Navbar: React.FC = () => {
               <Button
                 variant="primary"
                 size="sm"
+                className="text-xs px-2.5 sm:px-3.5 py-1.5 font-bold"
                 onClick={() => openAuthModal('signup')}
               >
-                Sign Up
+                <span className="hidden sm:inline">Sign Up</span>
+                <span className="sm:hidden">Join</span>
               </Button>
             </div>
           ) : (
             <div className="relative">
               <button
+                id="navbar-user-menu-btn"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 p-1 pl-2 rounded-xl bg-neutral-100/60 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all"
+                className="flex items-center gap-1.5 sm:gap-2 p-1 sm:pl-2 rounded-xl bg-neutral-100/70 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all"
+                aria-label="User profile menu"
               >
                 <div className="text-right hidden sm:block">
                   <div className="text-xs font-bold text-neutral-900 dark:text-white leading-none">
@@ -250,7 +288,7 @@ export const Navbar: React.FC = () => {
                   alt="Avatar"
                   className="w-7 h-7 rounded-lg object-cover ring-1 ring-neutral-300 dark:ring-neutral-700"
                 />
-                <ChevronDown className="w-3 h-3 text-neutral-400 mr-1" />
+                <ChevronDown className="w-3 h-3 text-neutral-400 hidden sm:block mr-1" />
               </button>
 
               {/* User Dropdown Menu */}
@@ -357,60 +395,209 @@ export const Navbar: React.FC = () => {
             </div>
           )}
 
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Hamburger Button - High visibility & clear touch target */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-            aria-label="Toggle navigation menu"
+            id="mobile-main-menu-toggle-btn"
+            type="button"
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            className={`md:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all ${
+              mobileMenuOpen 
+                ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 shadow-md ring-2 ring-neutral-400/40' 
+                : 'text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-850 active:scale-95 bg-neutral-100/80 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800'
+            }`}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Full-Screen Overlay & Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-4 py-4 space-y-2">
-          {navLinks.map((link) => (
+        <div className="md:hidden fixed inset-0 top-16 z-50 flex flex-col justify-start">
+          {/* Backdrop click-to-close */}
+          <div 
+            className="fixed inset-0 top-16 bg-neutral-950/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-150"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          
+          {/* Drawer Panel */}
+          <div className="relative w-full max-h-[calc(100vh-4rem)] overflow-y-auto bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 shadow-2xl p-4 sm:p-5 space-y-4 animate-in slide-in-from-top-2 duration-200 z-10">
+            
+            {/* Quick Search Action */}
             <button
-              key={link.id}
               onClick={() => {
-                setCurrentView(link.id as any);
                 setMobileMenuOpen(false);
+                setSearchModalOpen(true);
               }}
-              className="w-full text-left px-3 py-2 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-850"
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-neutral-100/90 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
-              {link.label}
+              <div className="flex items-center gap-2.5">
+                <Search className="w-4 h-4 text-neutral-400" />
+                <span>Search courses, tools, paths...</span>
+              </div>
+              <span className="font-mono text-[10px] bg-neutral-200 dark:bg-neutral-800 px-1.5 py-0.5 rounded text-neutral-500">⌘K</span>
             </button>
-          ))}
-          <div className="pt-3 pb-1 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
-            <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">Appearance</span>
-            <ThemeToggle variant="segmented" size="sm" showLabels />
-          </div>
 
-          <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => {
-                setCurrentView('student-dashboard');
-                setMobileMenuOpen(false);
-              }}
-            >
-              Dashboard
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              className="flex-1"
-              onClick={() => {
-                setCurrentView('courses');
-                setMobileMenuOpen(false);
-              }}
-            >
-              Explore
-            </Button>
+            {/* Navigation Links Grid */}
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2 px-1">
+                Explore Curriculum & Tools
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = currentView === link.id;
+                  return (
+                    <button
+                      key={link.id}
+                      onClick={() => {
+                        setCurrentView(link.id as any);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                        isActive
+                          ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-bold shadow-xs'
+                          : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-white dark:text-neutral-950' : 'text-neutral-400'}`} />
+                        <span>{link.label}</span>
+                      </div>
+                      {isActive && (
+                        <span className="text-[10px] bg-white/20 dark:bg-black/20 px-1.5 py-0.5 rounded">Active</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Quick Portals & Dashboards */}
+            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-850">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2 px-1">
+                Portals & Workspaces
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start text-xs h-9"
+                  icon={<GraduationCap className="w-3.5 h-3.5" />}
+                  onClick={() => {
+                    setCurrentView('student-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Dashboard
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start text-xs h-9"
+                  icon={<Cloud className="w-3.5 h-3.5 text-blue-500" />}
+                  onClick={() => {
+                    setCurrentView('workspace');
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Workspace
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start text-xs h-9"
+                  icon={<Layers className="w-3.5 h-3.5" />}
+                  onClick={() => {
+                    setCurrentView('instructor-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Instructor
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start text-xs h-9"
+                  icon={<ShieldCheck className="w-3.5 h-3.5" />}
+                  onClick={() => {
+                    setCurrentView('admin-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Admin Portal
+                </Button>
+              </div>
+            </div>
+
+            {/* Role & Persona Switcher */}
+            <div className="p-3 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2">
+              <div className="flex items-center justify-between text-xs font-semibold text-neutral-600 dark:text-neutral-400">
+                <span>Active Persona Role</span>
+                <Badge variant={role === 'guest' ? 'neutral' : 'emerald'} size="sm">
+                  {role}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-4 gap-1.5 text-xs font-medium">
+                {(['student', 'instructor', 'admin', 'guest'] as RoleType[]).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => {
+                      setRole(r);
+                      if (r === 'student') setCurrentView('student-dashboard');
+                      if (r === 'instructor') setCurrentView('instructor-dashboard');
+                      if (r === 'admin') setCurrentView('admin-dashboard');
+                      if (r === 'guest') setCurrentView('landing');
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`py-1.5 px-2 rounded-xl text-center capitalize text-xs transition-all ${
+                      role === r
+                        ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-bold shadow-xs'
+                        : 'bg-white dark:bg-neutral-850 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Appearance Theme Selector */}
+            <div className="pt-2 pb-1 border-t border-neutral-100 dark:border-neutral-850 flex items-center justify-between">
+              <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">Appearance Theme</span>
+              <ThemeToggle variant="segmented" size="sm" showLabels />
+            </div>
+
+            {/* Guest Sign In Strip (if not logged in) */}
+            {role === 'guest' && (
+              <div className="pt-2 border-t border-neutral-100 dark:border-neutral-850 flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openAuthModal('login');
+                  }}
+                >
+                  Log In
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="flex-1 font-bold"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openAuthModal('signup');
+                  }}
+                >
+                  Sign Up Free
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

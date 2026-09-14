@@ -71,20 +71,20 @@ export const RoleSwitcher: React.FC = () => {
   };
 
   return (
-    <aside aria-label="Demo role and page switcher" className="fixed bottom-20 md:bottom-4 left-4 z-30 md:z-50">
-      <div className="bg-neutral-950/90 text-white backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl p-1.5 flex items-center gap-2 transition-all">
+    <aside aria-label="Demo role and page switcher" className="fixed bottom-20 md:bottom-4 left-2 sm:left-4 z-30 md:z-50 max-w-[calc(100vw-1rem)]">
+      <div className="bg-neutral-950/90 text-white backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl p-1.5 flex items-center gap-1.5 sm:gap-2 transition-all">
         {/* Toggle Panel Button */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-750 transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-750 transition-colors"
           title="Browse all 20 designed UI screens"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-neutral-400">View Screen:</span>
-          <span className="text-white font-bold truncate max-w-[140px]">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="text-neutral-400 hidden sm:inline">Screen:</span>
+          <span className="text-white font-bold truncate max-w-[90px] sm:max-w-[140px]">
             {views.find(v => v.id === currentView)?.label.replace(/^\d+\.\s*/, '') || currentView}
           </span>
-          <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Quick Persona Pills */}
@@ -113,7 +113,7 @@ export const RoleSwitcher: React.FC = () => {
         {/* Empty state tester toggle */}
         <button
           onClick={toggleEmptyState}
-          className={`px-2.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-colors ${
+          className={`px-2 sm:px-2.5 py-1.5 text-xs font-medium rounded-xl flex items-center gap-1.5 transition-colors ${
             emptyStateSimulated 
               ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
               : 'text-neutral-400 hover:text-white hover:bg-neutral-850'
@@ -121,13 +121,13 @@ export const RoleSwitcher: React.FC = () => {
           title="Simulate empty/zero-data states across pages"
         >
           <Eye className="w-3.5 h-3.5" />
-          <span className="hidden md:inline">{emptyStateSimulated ? 'Empty: ON' : 'Empty States'}</span>
+          <span className="hidden md:inline">{emptyStateSimulated ? 'Empty: ON' : 'Empty'}</span>
         </button>
       </div>
 
       {/* Expanded Quick Navigation Dropdown Modal */}
       {expanded && (
-        <div className="absolute bottom-14 left-0 w-80 sm:w-96 max-h-[80vh] overflow-y-auto bg-neutral-950/95 backdrop-blur-2xl border border-neutral-800 rounded-2xl shadow-2xl p-4 text-white z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="absolute bottom-14 left-0 w-[calc(100vw-2rem)] sm:w-96 max-w-sm max-h-[75vh] overflow-y-auto bg-neutral-950/95 backdrop-blur-2xl border border-neutral-800 rounded-2xl shadow-2xl p-4 text-white z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-neutral-800">
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-neutral-400">Design Explorer</div>

@@ -62,30 +62,31 @@ export const LandingPage: React.FC = () => {
     <div className="space-y-24 sm:space-y-32">
       
       {/* 1. Hero Section */}
-      <section className="relative pt-8 sm:pt-16 pb-12 overflow-hidden">
+      <section className="relative pt-6 sm:pt-16 pb-10 sm:pb-12 overflow-hidden">
         {/* Subtle Ambient Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-neutral-200/40 dark:bg-neutral-800/20 blur-[130px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[350px] bg-neutral-200/40 dark:bg-neutral-800/20 blur-[100px] sm:blur-[130px] rounded-full pointer-events-none -z-10" />
 
         <div className="max-w-5xl mx-auto text-center px-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-850 border border-neutral-200 dark:border-neutral-750 text-xs font-semibold text-neutral-800 dark:text-neutral-200 mb-8 animate-in fade-in duration-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>React 19, Next.js 15 & LLM Engineering Masterclasses Live</span>
-            <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-850 border border-neutral-200 dark:border-neutral-750 text-xs font-semibold text-neutral-800 dark:text-neutral-200 mb-6 sm:mb-8 animate-in fade-in duration-300 max-w-full">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="truncate">React 19, Next.js 15 & LLM Engineering Masterclasses</span>
+            <ChevronRight className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-neutral-950 dark:text-white leading-[1.1] mb-6">
+          <h1 className="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-neutral-950 dark:text-white leading-[1.12] mb-5 sm:mb-6 break-words">
             Architect the Future of <br className="hidden sm:inline" />
             <span className="text-neutral-500 dark:text-neutral-400">Software & AI Engineering.</span>
           </h1>
 
-          <p className="text-base sm:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-10">
+          <p className="text-sm sm:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 px-2 sm:px-0">
             A developer-first learning management platform engineered for serious practitioners. Master production systems, verify skills with cryptographically backed credentials, and learn directly from staff architects.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none mx-auto">
             <Button
               size="lg"
               variant="primary"
+              className="w-full sm:w-auto"
               icon={<ArrowRight className="w-4 h-4" />}
               iconPosition="right"
               onClick={() => openAuthModal('signup')}
@@ -95,6 +96,7 @@ export const LandingPage: React.FC = () => {
             <Button
               size="lg"
               variant="outline"
+              className="w-full sm:w-auto"
               icon={<Play className="w-4 h-4 fill-current" />}
               onClick={() => setCurrentView('courses')}
             >
@@ -103,7 +105,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Trust Meta */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-12 text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-6 mt-8 sm:mt-12 text-xs text-neutral-500 dark:text-neutral-400">
             <span className="flex items-center gap-1.5 font-medium">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 140k+ Active Engineers
             </span>
@@ -117,41 +119,41 @@ export const LandingPage: React.FC = () => {
         </div>
 
         {/* Hero Interactive Bento Showcase Preview */}
-        <div className="max-w-6xl mx-auto px-4 mt-16">
-          <GlassCard className="p-4 sm:p-6 shadow-2xl border border-neutral-300/80 dark:border-neutral-750">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 mt-12 sm:mt-16">
+          <GlassCard className="p-3.5 sm:p-6 shadow-2xl border border-neutral-300/80 dark:border-neutral-750">
             {/* Top Bar of Preview Window */}
-            <div className="flex items-center justify-between pb-4 mb-4 border-b border-neutral-200 dark:border-neutral-800">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                <span className="text-xs font-mono text-neutral-400 ml-2">apex-lms.studio/workbench/rsc-architecture</span>
+            <div className="flex items-center justify-between pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-neutral-200 dark:border-neutral-800 gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 truncate">
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-rose-500/80 shrink-0" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-500/80 shrink-0" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80 shrink-0" />
+                <span className="text-[11px] sm:text-xs font-mono text-neutral-400 ml-1 truncate">apex-lms.studio/workbench</span>
               </div>
-              <Badge variant="success" size="sm">Live Environment</Badge>
+              <Badge variant="success" size="sm" className="shrink-0 text-[10px] sm:text-xs">Live Environment</Badge>
             </div>
 
             {/* Bento Grid Preview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               
               {/* Active Lesson Preview */}
-              <div className="md:col-span-2 rounded-2xl bg-neutral-900 text-white p-6 relative overflow-hidden flex flex-col justify-between">
+              <div className="md:col-span-2 rounded-2xl bg-neutral-900 text-white p-4 sm:p-6 relative overflow-hidden flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                     <Badge variant="purple" size="sm">Course In Progress</Badge>
-                    <span className="text-xs text-neutral-400 font-mono">Module 1 • Lesson 3 of 64</span>
+                    <span className="text-[11px] sm:text-xs text-neutral-400 font-mono truncate">Module 1 • Lesson 3 of 64</span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold mb-2">Next.js 15 & React 19: Full-Stack Architecture</h3>
-                  <p className="text-xs text-neutral-400 max-w-lg mb-4">
+                  <h3 className="text-base sm:text-xl font-bold mb-2">Next.js 15 & React 19: Full-Stack Architecture</h3>
+                  <p className="text-xs text-neutral-400 max-w-lg mb-4 leading-relaxed">
                     Optimistic UI Updates with useOptimistic & Server Action rollback boundaries.
                   </p>
-                  <div className="bg-neutral-950/80 p-3 rounded-xl border border-neutral-800 font-mono text-xs text-neutral-300 overflow-x-auto">
-                    <code>const [optimisticState, setOptimistic] = useOptimistic(state, updateFn);</code>
+                  <div className="bg-neutral-950/80 p-3 rounded-xl border border-neutral-800 font-mono text-[11px] sm:text-xs text-neutral-300 overflow-x-auto max-w-full">
+                    <code className="whitespace-nowrap sm:whitespace-normal">const [optimisticState, setOptimistic] = useOptimistic(state, updateFn);</code>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-6 mt-4 border-t border-neutral-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-5 sm:pt-6 mt-4 border-t border-neutral-800">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
                       <Play className="w-4 h-4 fill-white text-white ml-0.5" />
                     </div>
                     <div>
@@ -162,6 +164,7 @@ export const LandingPage: React.FC = () => {
                   <Button
                     size="sm"
                     variant="primary"
+                    className="w-full sm:w-auto"
                     onClick={() => {
                       setSelectedCourse(MOCK_COURSES[0]);
                       setCurrentView('learning-interface');
@@ -350,8 +353,8 @@ export const LandingPage: React.FC = () => {
 
       {/* 4. Trending Learning Paths */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-neutral-950 text-white border border-neutral-800 relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl mb-10">
+        <div className="p-5 sm:p-12 rounded-2xl sm:rounded-3xl bg-neutral-950 text-white border border-neutral-800 relative overflow-hidden">
+          <div className="relative z-10 max-w-2xl mb-8 sm:mb-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-semibold text-white mb-4">
               <Sparkles className="w-3.5 h-3.5" /> Structured Career Roadmaps
             </div>
@@ -536,18 +539,18 @@ export const LandingPage: React.FC = () => {
 
       {/* 8. Final CTA */}
       <section className="max-w-5xl mx-auto px-4 pb-12">
-        <div className="p-8 sm:p-14 rounded-3xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 text-center relative overflow-hidden shadow-2xl">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
+        <div className="p-6 sm:p-14 rounded-2xl sm:rounded-3xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 text-center relative overflow-hidden shadow-2xl">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-4">
             Begin Your Engineering Upskilling Today.
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-400 dark:text-neutral-600 max-w-lg mx-auto leading-relaxed mb-8">
+          <p className="text-xs sm:text-sm text-neutral-400 dark:text-neutral-600 max-w-lg mx-auto leading-relaxed mb-8 px-2">
             Access complete interactive video lessons, quizzes, GitHub assignments, and verified certificates.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
             <Button
               size="lg"
               variant="primary"
-              className="bg-white text-neutral-950 hover:bg-neutral-100 dark:bg-neutral-950 dark:text-white dark:hover:bg-neutral-850 font-bold"
+              className="w-full sm:w-auto bg-white text-neutral-950 hover:bg-neutral-100 dark:bg-neutral-950 dark:text-white dark:hover:bg-neutral-850 font-bold"
               onClick={() => openAuthModal('signup')}
             >
               Get Started for Free
@@ -555,7 +558,7 @@ export const LandingPage: React.FC = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-neutral-700 text-white dark:border-neutral-300 dark:text-neutral-950"
+              className="w-full sm:w-auto border-neutral-700 text-white dark:border-neutral-300 dark:text-neutral-950"
               onClick={() => setCurrentView('courses')}
             >
               Browse 64 Courses
